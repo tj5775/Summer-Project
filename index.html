@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>First Assignment</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="leftSide">
+                <form>
+                    <select id="sensorsList" onchange="sensorSelection()">
+                        <option>--Select a sensor--</option>
+                        <option>Gyroscope</option>
+                        <option>Accelerometer</option>
+                        <option>Magnetometer</option>
+                    </select>
+                    <div id="sensorSelected"></div>
+                </form>
+            </div>
+            <div class="rightSide">
+                Select the range to get random numbers
+                <br>
+                <form>
+                    Min: 
+                    <input type="number" value="0" id="minValue">
+                    Max: 
+                    <input type="number" value="0" id="maxValue">
+                    <button class="btn btn-success" id="start" >Start</button>
+                    <button class="btn btn-danger" id="stop">Stop</button>
+                </form>
+                <div id="msgRandomRange"></div>
+                <div id="output"></div>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
+
+        <!-- <style>
+            input{
+                width: 50px;
+            }
+            .container{
+                display: flex;
+                background-color: blueviolet;
+                height: 500px;
+                width: 700px;
+                padding-top: 20px;
+            }
+            .leftSide{
+                padding-left: 5px;
+                width: 40%;
+                background-color: aqua;
+                margin-right: 5px;
+            }
+            .rightSide{
+                padding-left: 5px;
+                width: 60%;
+                background-color: burlywood;
+            }
+        </style> -->
+    </body>
+</html>
