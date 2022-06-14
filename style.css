@@ -1,32 +1,57 @@
 body {
-    background-color: darkblue;
+    background-color: gainsboro;
 }
 
 input{
     width: 50px;
-    font-family: Arial, Helvetica, sans-serif;
 }
+
+#main-header {
+    background-color: darkblue;
+}
+
+#main-header h1 {
+    color: white;
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+#main-footer {
+    font-family:Arial, Helvetica, sans-serif;
+    background-color: darkblue;
+    color: white;
+    text-align: center;
+    position: absolute;
+    bottom:0; 
+    width: 100%;
+    padding-top: 10px;
+}
+
 .container{
     display: flex;
-    font-family: Arial, Helvetica, sans-serif;
-    /* background-color:darkgray;
-    height: 500px;
-    width: 700px;
-    */
-    padding-top: 20px;
-}
-.leftSide{
-    font-weight: bold;
-    border-color:black;
+    background-color: dimgray;
     padding: 10px;
-    width: 40%;
-    background-color: lightcyan;
+    border: 2px solid black;
+    box-shadow: 5px 2px 2px black;
+}
+
+.leftSide{
+    padding: 5px;
+    width: 50%;
+    background-color: paleturquoise;
     margin-right: 5px;
+    line-height: 2em;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid black;
 }
 .rightSide{
+    padding: 5px;
+    width: 50%;
+    background-color: paleturquoise;
+    text-align: center;
     font-weight: bold;
-    border-color: black;
-    padding: 10px;
-    width: 60%;
-    background-color: lightcyan;
+    border: 2px solid black;
 }
