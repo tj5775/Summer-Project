@@ -17,8 +17,16 @@ app.get('/output',function(req,res){
   console.log("Data Saved");
 })
 
-// ----------------- Connection with Postgres -------------------//
-client.connect();
+// ----------------- Connection with Postgres and creating a table -------------------//
+client.connect(function(err) {
+    if (err) throw err;
+    console.log('Connected to the database!');
+    let query = "CREATE TABLE IF NOT EXISTS sensors (sensor_id serial PRIMARY KEY, name VARCHAR(50) NOT NULL, value INT, date DATE DEFAULT now())";
+    client.query(query, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+    })
+})
 
 app.get('/', (req, res)=>{
     client.query(`Select * from sensors`, (err, result)=>{
@@ -31,10 +39,10 @@ app.get('/', (req, res)=>{
 // --------------------- Inserting values ----------------------//
 app.post('/', (req, res)=> {
     const sensor = req.body;
-    let insertQuery = `insert into users(firstName, value) 
-                       values(${sensor.name}, '${sensor.value}')`
+    let insertQuery = 'insert into sensors3(name, value) VALUES ?'; 
+    data = [ [reg.body.sensorsList, reg.body.output]]
 
-    client.query(insertQuery, (err, result)=>{
+    client.query(insertQuery, [data], (err, result)=>{
         if(!err){
             res.send('Insertion was successful')
         }

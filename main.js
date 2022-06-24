@@ -1,12 +1,12 @@
-const client = require('./database.js')
-const express = require('express');
-const app = express();
+// const client = require('./database.js')
+// const express = require('express');
+// const app = express();
 
-app.listen(3300, ()=>{
-    console.log("Sever is now listening at port 3300");
-})
+// app.listen(3300, ()=>{
+//     console.log("Sever is now listening at port 3300");
+// })
 
-client.connect();
+// client.connect();
 
 // Variables that store the values for time, min, and max.
 var timer;
