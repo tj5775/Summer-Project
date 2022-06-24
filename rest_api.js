@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 
 app.use(bodyParser.urlencoded({extended: false}))
-app.get('/submit',function(req,res){
+app.get('/output',function(req,res){
   console.log("Data Saved");
 })
 
