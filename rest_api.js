@@ -1,7 +1,7 @@
 const client = require('./database.js')
 const express = require('express');
 const app = express();
-const port = 3300;
+const port = 5500;
 const bodyParser=require('body-parser'); 
 
 // ------------- Rendering the HTML page -------------------//
@@ -26,20 +26,13 @@ client.connect(function(err) {
         if (err) throw err;
         console.log(result)
     })
-})
 
-app.get('/', (req, res)=>{
-    client.query(`Select * from sensors`, (err, result)=>{
-        if(!err){
-            res.send(result.rows);
-        }
-    });
 })
 
 // --------------------- Inserting values ----------------------//
 app.post('/', (req, res)=> {
     const sensor = req.body;
-    let insertQuery = 'insert into sensors3(name, value) VALUES ?'; 
+    let insertQuery = 'insert into sensors(name, value) VALUES ?'; 
     data = [ [reg.body.sensorsList, reg.body.output]]
 
     client.query(insertQuery, [data], (err, result)=>{
@@ -50,6 +43,16 @@ app.post('/', (req, res)=> {
     })
     client.end;
 })
+
+app.get('/', (req, res)=>{
+    client.query(`Select * from sensors`, (err, result)=>{
+        if(!err){
+            res.send(result.rows);
+        }
+    });
+})
+
+
 
 app.listen(port, ()=>{
     console.log(`Sever is now listening at port ${port}`);
