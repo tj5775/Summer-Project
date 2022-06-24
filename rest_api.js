@@ -8,12 +8,12 @@ const bodyParser=require('body-parser');
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(__dirname + "summer-project/index.html");
 });
 
 
 app.use(bodyParser.urlencoded({extended: false}))
-app.get('/output',function(req,res){
+app.get('/submit',function(req,res){
   console.log("Data Saved");
 })
 
