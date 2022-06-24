@@ -33,7 +33,7 @@ client.connect(function(err) {
 app.post('/', (req, res)=> {
     const sensor = req.body;
     let insertQuery = 'insert into sensors(name, value) VALUES ?'; 
-    data = [ [reg.body.sensorsList, reg.body.output]]
+    data = [ [req.body.sensorsList, req.body.output]]
 
     client.query(insertQuery, [data], (err, result)=>{
         if(!err){
