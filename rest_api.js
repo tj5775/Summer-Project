@@ -5,8 +5,8 @@ const bodyParser=require('body-parser');
 
 const port = 5500;
 const app = express();
-// ------------- Rendering the HTML page -------------------//
 
+// ------------- Rendering the HTML page -------------------//
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
@@ -17,23 +17,12 @@ app.get("/", (req, res) => {
 //     console.log(err,res)
 // })
 
-
 app.use(bodyParser.urlencoded({extended: false}))
 app.get('/stop',function(req,res){
   console.log("Data Saved");
 })
 
 //--------------------- Inserting values ----------------------//
-// app.post("/",(req,res)=>{
-//     const { sensorsList, output}=req.body
-//     client.query('INSERT INTO SENSORS ($1, $2)', [sensorsList, output], (err,res)=> {
-//         console.log(err,res);
-//         client.end() 
-
-//     })
-   
-//     res.sendFile(__dirname + '/summer-project/index.html');
-//   })
 app.post('/', (req, res)=> {
     const user = req.body;
     let insertQuery = `insert into public.sensors(name, value) 
@@ -47,7 +36,6 @@ app.post('/', (req, res)=> {
     })
     client.end;
 })
-
 
 app.listen(port, ()=>{
     console.log(`Sever is now listening at port ${port}`);
