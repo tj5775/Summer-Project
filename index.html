@@ -22,7 +22,7 @@
             <!-- The left side contain's the drop down menu-->
             <div class="leftSide">
                 <form>
-                    <select id="sensorsList" onchange="sensorSelection()">
+                    <select id="sensorsList" required name= "sensorsList" onchange="sensorSelection()">
                         <option>--Select a sensor--</option>
                         <option>Ph</option>
                         <option>Turbidity</option>
@@ -47,7 +47,7 @@
                 <!-- JavasScript function will output the number range and the random value generated-->
                 <div class="container2">
                     <div id="msgRandomRange"></div>
-                    <div id="output"></div>
+                    <div id="output" required name= "output"></div>
                 </div>
             </div>
         </div>

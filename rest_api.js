@@ -1,41 +1,45 @@
 const client = require('./database.js')
 const express = require('express');
-const app = express();
-const port = 5500;
 const bodyParser=require('body-parser'); 
 
+
+const port = 5500;
+const app = express();
 // ------------- Rendering the HTML page -------------------//
+
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "summer-project/index.html");
+  res.sendFile(__dirname + '/summer-project/index.html');
 });
+
+// client.query('Select * from public.sensors',(err,res)=> {
+//     console.log(err,res)
+// })
 
 
 app.use(bodyParser.urlencoded({extended: false}))
-app.get('/output',function(req,res){
+app.get('/stop',function(req,res){
   console.log("Data Saved");
 })
 
-// ----------------- Connection with Postgres and creating a table -------------------//
-client.connect(function(err) {
-    if (err) throw err;
-    console.log('Connected to the database!');
-    let query = "CREATE TABLE IF NOT EXISTS sensors (sensor_id serial PRIMARY KEY, name VARCHAR(50) NOT NULL, value INT, date DATE DEFAULT now())";
-    client.query(query, (err, result) => {
-        if (err) throw err;
-        console.log(result)
-    })
+//--------------------- Inserting values ----------------------//
+// app.post("/",(req,res)=>{
+//     const { sensorsList, output}=req.body
+//     client.query('INSERT INTO SENSORS ($1, $2)', [sensorsList, output], (err,res)=> {
+//         console.log(err,res);
+//         client.end() 
 
-})
-
-// --------------------- Inserting values ----------------------//
+//     })
+   
+//     res.sendFile(__dirname + '/summer-project/index.html');
+//   })
 app.post('/', (req, res)=> {
-    const sensor = req.body;
-    let insertQuery = 'insert into sensors(name, value) VALUES ?'; 
-    data = [ [req.body.sensorsList, req.body.output]]
+    const user = req.body;
+    let insertQuery = `insert into public.sensors(name, value) 
+                       values('${user.sensorsList}', '${user.output}')`
 
-    client.query(insertQuery, [data], (err, result)=>{
+    client.query(insertQuery, (err, result)=>{
         if(!err){
             res.send('Insertion was successful')
         }
@@ -43,15 +47,6 @@ app.post('/', (req, res)=> {
     })
     client.end;
 })
-
-app.get('/', (req, res)=>{
-    client.query(`Select * from sensors`, (err, result)=>{
-        if(!err){
-            res.send(result.rows);
-        }
-    });
-})
-
 
 
 app.listen(port, ()=>{
