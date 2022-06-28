@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + '/summer-project/index.html');
 });
 
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
 
