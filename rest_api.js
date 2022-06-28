@@ -16,12 +16,14 @@ app.get("/", (req, res) => {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-
 // Insert values into Postgres Table
 app.post('/', (req, res)=> {
     const {sensorName, randomVal} = req.body;
+    console.log(sensorName);
+    console.log(randomVal);
     let insertQuery = `insert into public.sensors(name, value) 
                        values('${sensorName}', '${randomVal}')`
+    console.log(insertQuery);
     client.query(insertQuery, (err, result)=>{
         if(!err){
             res.send('Insertion was successful')
