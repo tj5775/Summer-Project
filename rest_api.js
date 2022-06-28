@@ -15,10 +15,6 @@ app.get("/", (req, res) => {
 
 app.use(bodyParser.urlencoded({extended: false}))
 
-// client.query('Select * from public.sensors',(err,res)=> {
-//     console.log(err,res)
-// })
-
 
 // Insert values into Postgres Table
 app.post('/', (req, res)=> {
