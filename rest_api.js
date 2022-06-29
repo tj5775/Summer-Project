@@ -32,7 +32,7 @@ app.post('/', (req, res)=> {
         else{ console.log(err.message)
               res.send('Insertion unsuccessful.') }
     })
-    client.end();
+    //client.end();
 })
 
 // Bind and listen to the connections on localhost and port
