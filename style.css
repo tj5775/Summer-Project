@@ -43,19 +43,6 @@ input{
     padding-right: 5px;
 }
 
-#btnAdd {
-    background-color: lightgray;
-    color: black;
-    width: 100px;
-    height: 40px;
-    border-radius: 3px;
-}
-
-#name {
-    width: 200px;
-    height: 25px;
-}
-
 .container{
     display: flex;
     background-color: dimgray;
@@ -76,7 +63,6 @@ input{
     padding: 5px;
     width: 50%;
     background-color: paleturquoise;
-    padding-top: 10px;
     margin-right: 5px;
     line-height: 2em;
     font-weight: bold;

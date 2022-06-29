@@ -6,10 +6,6 @@ var randomNumber;
 var randomNumbers = '';
 var sensor;
 
-const btnAdd = document.querySelector('#btnAdd');
-const name = document.querySelector('#name');
-const selectList = document.querySelector('#sensorsList');
-
 // Outputs a message based on the value selected from the sensorList
 function sensorSelection(){
     sensor = document.getElementById('sensorsList');
@@ -20,31 +16,12 @@ function sensorSelection(){
  * When the stop button is clicked then stop generating random numbers
  * While the start event is occurring, the min and max value will be displayed
  */
-document.getElementById('btnAdd').addEventListener('click', addNewSensor);
 document.getElementById('start').addEventListener('click', startRandomNumbers);
 document.getElementById('stop').addEventListener('click', stopRandomNumbers);
 document.getElementById('stop').addEventListener('click', saveData);
 document.getElementById('minValue').addEventListener('change', displayMsgRange);
 document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
-
-function addNewSensor(e) {
-    e.preventDefault();
-
-    if (name.value == '') {
-        alert("Please enter the sensor name.");
-        return;
-    }
-    // create a new option
-    const option = new Option(name.value, name.value);
-    // add option to the drop down list
-    selectList.add(option, integer);
-
-    // reset the value for input
-    name.value = '';
-    name.focus();
-
-}
 
 // Displays the range of the generated value
 function displayMsgRange(){
@@ -115,9 +92,3 @@ function saveData() {
         console.log("Request complete! response:", res);
     });
  }
-
-/*
- var numArray = randomNumbers.split(',');
-     for (let i = 0; i < numLength; i++)
-    { }
-  */

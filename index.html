@@ -22,16 +22,13 @@
             <!-- The left side contain's the drop down menu-->
             <div class="leftSide">
                 <form>
-                    <label for="name">Add a new sensor:</label>
-                    <input type="text" id="name" placeholder="Enter a sensor" autocomplete="off">
-                    <button id="btnAdd">Add</button>
-                    <label for="listName">Sensors:</label>
                     <select id="sensorsList" onchange="sensorSelection()">
                         <option>--Select a sensor--</option>
-                        <option value="Ph">Ph</option>
+                        <option>Ph</option>
                         <option value ="Turbidity">Turbidity</option>
                         <option value = "Cloralen">Cloralen</option>
                     </select>
+                    <div id="sensorSelected"></div>
                 </form>
             </div>
             <!-- The right side contain's the random number generator -->
