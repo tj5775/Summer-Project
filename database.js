@@ -16,7 +16,6 @@ client.connect(function(err) {
     client.query(query, (err, result) => {
         if (err) throw err;
         console.log(result)
-        //client.end()
     })
 })
 
