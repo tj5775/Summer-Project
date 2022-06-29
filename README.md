@@ -1,5 +1,5 @@
 # Summer-Project
-I installed the following modules:
+The following modules are installed:
 
 npm install pg
 npm install express
