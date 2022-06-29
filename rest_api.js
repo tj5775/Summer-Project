@@ -34,8 +34,6 @@ app.post('/', (req, res)=> {
     })
 })
 
-client.end();
-
 // Bind and listen to the connections on localhost and port
 app.listen(port, ()=>{
     console.log(`Sever is now listening at port ${port}`);
