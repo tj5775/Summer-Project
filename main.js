@@ -96,4 +96,5 @@ function saveData() {
           console.log("Request complete! response:", res);
         });
     }
+    randomNumbers = '';
  }
