@@ -24,22 +24,27 @@
                 <form>
                     <select id="sensorsList" onchange="sensorSelection()">
                         <option>--Select a sensor--</option>
-                        <option>Ph</option>
-                        <option value ="Turbidity">Turbidity</option>
-                        <option value = "Cloralen">Cloralen</option>
                     </select>
+                    <button class="btn btn-primary" id="addSensorBtn">Add Sensor</button>
                     <div id="sensorSelected"></div>
+                    <div id="errorMsg" class="alert alert-danger" role="alert"></div>
                 </form>
-            </div>
-            <!-- The right side contain's the random number generator -->
-            <div class="rightSide">
-                Select the range to get random numbers
-                <br>
-                <form>
+                
+
+                <div id="addSensorForm" style="text-align: left; padding-left: 20px;">
+                    <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
+                    <br>
                     Min: 
                     <input type="number" value="0" id="minValue">
                     Max: 
                     <input type="number" value="0" id="maxValue">
+                    <button class="btn btn-primary" id="addBtn">Add</button>
+                </div>
+                
+            </div>
+            <!-- The right side contain's the random number generator -->
+            <div class="rightSide">
+                <form>
                     <!-- The button tags will create both the start and stop buttons -->
                     <button class="btn btn-success" id="start" >Start</button>
                     <button class="btn btn-danger" id="stop">Stop</button>
