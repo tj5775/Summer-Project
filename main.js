@@ -2,10 +2,17 @@
 var timer;
 var min = 0;
 var max = 0;
+var randomNumber;
+var randomNumbers = '';
+var sensor;
+
+const btnAdd = document.querySelector('#btnAdd');
+const name = document.querySelector('#name');
+const selectList = document.querySelector('#sensorsList');
 
 // Outputs a message based on the value selected from the sensorList
 function sensorSelection(){
-    var sensor = document.getElementById('sensorsList');
+    sensor = document.getElementById('sensorsList');
     document.getElementById('sensorSelected').innerHTML = 'You selected: ' + sensor.value;
 }
 
@@ -13,11 +20,31 @@ function sensorSelection(){
  * When the stop button is clicked then stop generating random numbers
  * While the start event is occurring, the min and max value will be displayed
  */
+document.getElementById('btnAdd').addEventListener('click', addNewSensor);
 document.getElementById('start').addEventListener('click', startRandomNumbers);
 document.getElementById('stop').addEventListener('click', stopRandomNumbers);
+document.getElementById('stop').addEventListener('click', saveData);
 document.getElementById('minValue').addEventListener('change', displayMsgRange);
 document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
+
+function addNewSensor(e) {
+    e.preventDefault();
+
+    if (name.value == '') {
+        alert("Please enter the sensor name.");
+        return;
+    }
+    // create a new option
+    const option = new Option(name.value, name.value);
+    // add option to the drop down list
+    selectList.add(option, integer);
+
+    // reset the value for input
+    name.value = '';
+    name.focus();
+
+}
 
 // Displays the range of the generated value
 function displayMsgRange(){
@@ -33,11 +60,14 @@ function startRandomNumbers(e){
     // let min = document.getElementById('minValue').value;
     // let max = document.getElementById('maxValue').value;
     // document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
-    var randomNumber = generateRandomNumbers();
+    randomNumber = generateRandomNumbers();
+    randomNumbers += randomNumber + ", ";
     document.getElementById('output').innerHTML = randomNumber;
     timer = setInterval(function(){
         randomNumber = generateRandomNumbers();
         document.getElementById('output').innerHTML = randomNumber;
+        randomNumbers += randomNumber + ", ";
+        console.log(randomNumbers);
     }, 1000)
     
 }
@@ -54,11 +84,11 @@ function generateRandomNumbers(){
     console.log('rand: ' + rand);
     // multiply with difference 
     rand = Math.floor( rand * difference);
-    console.log('rand: ' + rand);
 
     // add with min value 
     rand = rand + min;
 
+    console.log('rand: ' + rand);
     return rand;
 }
 
@@ -66,5 +96,27 @@ function generateRandomNumbers(){
 function stopRandomNumbers(e){
     e.preventDefault();
     console.log('stop random numbers');
+    // removes the last ', ' in the string
+    randomNumbers = randomNumbers.slice(0, -2);
     clearInterval(timer);
 }    
+
+// Saves a random number
+ function saveData() {
+    var numArray = randomNumbers.split(',');
+    let numLength = numArray.length;
+    console.log(numArray);
+    for (let i = 0; i < numLength; i++)
+    {
+        console.log('we are in saveData loop');
+        let data = {sensorName: sensor.value, randomValue: numArray[i]};
+        console.log('num array' +numArray[i]);
+        fetch("/", {
+          method: "POST",
+          headers: {'Content-Type': 'application/json'}, 
+          body: JSON.stringify(data)
+        }).then(res => {
+          console.log("Request complete! response:", res);
+        });
+    }
+ }
