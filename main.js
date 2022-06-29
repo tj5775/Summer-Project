@@ -102,21 +102,22 @@ function stopRandomNumbers(e){
 }    
 
 // Saves a random number
- function saveData() {
-    var numArray = randomNumbers.split(',');
-    let numLength = numArray.length;
-    console.log(numArray);
-    for (let i = 0; i < numLength; i++)
-    {
-        console.log('we are in saveData loop');
-        let data = {sensorName: sensor.value, randomValue: numArray[i]};
-        console.log('num array' +numArray[i]);
-        fetch("/", {
-          method: "POST",
-          headers: {'Content-Type': 'application/json'}, 
-          body: JSON.stringify(data)
-        }).then(res => {
-          console.log("Request complete! response:", res);
-        });
-    }
+function saveData() {
+    let numLength = randomNumbers.length;
+    console.log(randomNumbers);
+    console.log('We are in saveData loop');
+    let data = {sensorName: sensor.value, randomValue: randomNumbers};
+    fetch("/", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response:", res);
+    });
  }
+
+/*
+ var numArray = randomNumbers.split(',');
+     for (let i = 0; i < numLength; i++)
+    { }
+  */
