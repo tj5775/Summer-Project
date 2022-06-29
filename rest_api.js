@@ -16,20 +16,23 @@ app.get("/", (req, res) => {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-
 // Insert values into Postgres Table
 app.post('/', (req, res)=> {
-    const {sensorName, randomVal} = req.body;
+    const {sensorName, randomValue} = req.body;
+    console.log(sensorName);
+    console.log(randomValue);
     let insertQuery = `insert into public.sensors(name, value) 
-                       values('${sensorName}', '${randomVal}')`
+                       values('${sensorName}', '${randomValue}')`
+    console.log(insertQuery);
     client.query(insertQuery, (err, result)=>{
         if(!err){
             res.send('Insertion was successful')
             console.log(result);
         }
-        else{ console.log(err.message) }
+        else{ console.log(err.message)
+              res.send('Insertion unsuccessful.') }
     })
-    client.end;
+    client.end();
 })
 
 // Bind and listen to the connections on localhost and port
