@@ -1,6 +1,7 @@
 # Import package
 import paho.mqtt.client as mqtt
 import time
+import random
 
 # Define Variables
 MQTT_HOST = "13.57.29.105"
@@ -13,7 +14,7 @@ MQTT_TOPIC = "61c4b89a73bba8339e58a99f"
 
 
 def on_publish(client, userdata, mid):
-	print("Message Published...")
+	print("Message Published:")
 
 
 # Initiate MQTT Client
@@ -28,7 +29,9 @@ mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
 # Publish message to MQTT Broker
 while True:
 	time.sleep(2)
-	mqttc.publish(MQTT_TOPIC, '{ "randomNum":"1648854762"}')
+	n = str(random.randint(0, 100))
+	print("Random Number " + n)
+	mqttc.publish(MQTT_TOPIC, '{ "randomNum":"'+n+'"}')
 
 # Disconnect from MQTT_Broker
 mqttc.disconnect()
