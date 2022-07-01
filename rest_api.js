@@ -3,6 +3,7 @@ const client = require("./database.js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const port = 5500;
 const app = express();
@@ -18,6 +19,11 @@ app.get("/", (req, res) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use("/user", UserController);
 
 // Insert values into Postgres Table
