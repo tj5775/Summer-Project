@@ -1,5 +1,5 @@
 //todo uncomment
-// const client = require('./database.js')
+const client = require("./database.js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -23,23 +23,24 @@ app.use("/user", UserController);
 // Insert values into Postgres Table
 //todo uncomment
 
-// app.post('/', (req, res)=> {
-//     const {sensorName, randomValue} = req.body;
-//     console.log(sensorName);
-//     console.log(randomValue);
-//     let insertQuery = `insert into public.sensors(name, value) 
-//                        values('${sensorName}', '${Number(randomValue)}')`
-//     console.log(insertQuery);
-//     client.query(insertQuery, (err, result)=>{
-//         if(!err){
-//             res.send('Insertion was successful')
-//             console.log(result);
-//         }
-//         else{ console.log(err.message)
-//               res.send('Insertion unsuccessful.') }
-//     })
-//     //client.end();
-// })
+app.post("/", (req, res) => {
+  const { sensorName, randomValue } = req.body;
+  console.log(sensorName);
+  console.log(randomValue);
+  let insertQuery = `insert into public.sensors(name, value) 
+                       values('${sensorName}', '${Number(randomValue)}')`;
+  console.log(insertQuery);
+  client.query(insertQuery, (err, result) => {
+    if (!err) {
+      res.send("Insertion was successful");
+      console.log(result);
+    } else {
+      console.log(err.message);
+      res.send("Insertion unsuccessful.");
+    }
+  });
+  //client.end();
+});
 
 // Bind and listen to the connections on localhost and port
 
