@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <title>[webpack] map app</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <nav style="font-weight: bold; justify-content: space-between;" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a href="index.html" class="text-primary navbar-brand" style="margin-left: 15%;"><i>Smart City</i></a>
+    <div style=" min-width:15rem;justify-content: space-between; display: flex; flex-direction: row; margin-right:10%;">
+      <a class="nav-link text-secondary " href="/login.html">Sign In</a>
+      <br>
+      <a class="nav-link btn btn-outline-primary my-2 my-sm-0" href="/signup.html">Register</a>
+    </div>
+  </nav>
+  <div
+    style=" display: flex; flex-direction:row;margin-left:15%; margin-top:40px;margin-bottom:100px; color:rgba(143, 88, 73, 1)">
+    <div>
+      <h1 class="display-4">View IoT data on the web<br> with a simple click</h1>
+      <form style="width:70%; margin-top:40px">
+        <div class="form-group input-group-lg">
+          <input id="email" class="form-control" placeholder="Email">
+        </div>
+        <div class="form-group input-group-lg">
+
+          <input id="password" type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+          <a href="reset.html">Forgot Password?</a>
+        </div>
+        <br>
+        <button style="border-radius: 20px;" id="btnSubmitModal" type="button"
+          class="btn btn-primary btn-lg btn-block">Login</button>
+
+      </form>
+    </div>
+    <img src="./index-graphic.svg" style=" width:35%;height: auto;padding: 10px;margin-left:5%;" />
+  </div>
+  <div style=" margin-top:40px;  background-color: rgb(250,	249,	247	); height:350px; ">
+    <!--
+
+    <div
+      style="display: flex; flex-direction:row; padding-top:40px; margin-left:15%;margin-right:15%;color:rgba(143, 88, 73, 1); justify-content: space-between">
+      <h2 style="width:80%; margin-right:10%;" class="display-5">Publish and explore<br> data on various topics</h2>
+      <div style="margin-top:20px;">
+        <h5 style="width:100%;" class="label-3">DATA TOPICS</h5>
+      <div style="width:100%;margin-top:5%;font-size: xx-large; display:flex; flex-direction:row;
+      justify-content: flex-start;  flex-wrap: wrap;">
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Parking</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Weather</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Pedestrians</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Traffic</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Hospitals</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Police Stations</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Fire Stations</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Water Sources</h1>
+        <h1  class=" badge badge-pill badge-secondary" style = "margin-right: 20px;;">Tweets</h1>
+
+
+      </div>
+
+      </div>
+    </div>
+        -->
+
+  </div>
+
+
+  <script type="module" src="login.js"></script>
+
+</body>
+
+</html>

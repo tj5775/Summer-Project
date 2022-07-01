@@ -1,22 +1,28 @@
+//todo uncomment
 const client = require('./database.js')
-const express = require('express');
-const bodyParser=require('body-parser'); 
-
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const port = 5500;
 const app = express();
 
+const UserController = require("./routes/user");
+
 // Render and load the HTML page
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + "/static"));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + '/summer-project/index.html');
+  res.sendFile(__dirname + "/summer-project/index.html");
 });
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/user", UserController);
 
 // Insert values into Postgres Table
+//todo uncomment
+
 app.post('/', (req, res)=> {
     const {sensorName, randomValue} = req.body;
     console.log(sensorName);
@@ -36,6 +42,12 @@ app.post('/', (req, res)=> {
 })
 
 // Bind and listen to the connections on localhost and port
-app.listen(port, ()=>{
+
+var online =
+  "mongodb+srv://aramirez:Alex123@cluster0.bii1t.mongodb.net/smartcity?retryWrites=true&w=majority";
+
+mongoose.connect(online, { useNewUrlParser: true }).then(() => {
+  app.listen(port, () => {
     console.log(`Sever is now listening at port ${port}`);
-})
+  });
+});
