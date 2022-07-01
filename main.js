@@ -3,43 +3,29 @@ var timer;
 var min = 0;
 var max = 0;
 var sensorList = ['Ph', 'Turbidity', 'Cloralen'];
-var sensorMinValues = [0, 3, 2];
-var sensorMaxValues = [5, 8, 12];
-var errorMsg = [];
-var addSensorForm = document.getElementById("addSensorForm");
-addSensorForm.style.display = 'none';
-var displayErrorMsg = document.getElementById("errorMsg");
-displayErrorMsg.style.display = 'none';
+if(localStorage.getItem('sensorList') != null){
+    sensorList = JSON.parse(localStorage.getItem('sensorList'));
+}
 
-// Outputs a message based on the value selected from the sensorList
-// function sensorSelection(){
-//     var sensor = document.getElementById('sensorsList');
-//     console.log(sensorList);
+var sensorMinValues = [0, 3, 2];
+if(localStorage.getItem('sensorMinValues') != null){
+    sensorMinValues = JSON.parse(localStorage.getItem('sensorMinValues'));
+}
+
+var sensorMaxValues = [5, 8, 12];
+if(localStorage.getItem('sensorMaxValues') != null){
+    sensorMaxValues = JSON.parse(localStorage.getItem('sensorMaxValues'));
+}
+
 var randomNumber;
 var randomNumbers = '';
 var sensor;
-
-// Outputs a message based on the value selected from the sensorList
-function sensorSelection(){
-    sensor = document.getElementById('sensorsList');
-    document.getElementById('sensorSelected').innerHTML = 'You selected: ' + sensor.value;
-    let index = sensorList.indexOf(sensor.value);
-    document.getElementById("minValue").value = sensorMinValues[index];
-    document.getElementById("maxValue").value = sensorMaxValues[index];
-    min = sensorMinValues[index];
-    max = sensorMaxValues[index];
-    document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
-
+window.onload = function(){
+    myFunction()
 }
 
-function getSensorsList(){
+function myFunction(){
     const sb = document.querySelector('#sensorsList');
-    
-    var i, L = sb.options.length - 1;
-    for(i = L; i >= 1; i--) {
-       sb.remove(i);
-    }
-
     for(var index = 0; index < sensorList.length; index++){
         // create a new option
         const option = new Option(sensorList[index], sensorList[index]);
@@ -47,45 +33,28 @@ function getSensorsList(){
     }
 }
 
-function displaySensorForm(e){
-    e.preventDefault();
-    var addSensorBtn = document.getElementById("addSensorBtn");
-    addSensorBtn.style.display = 'none';
-    addSensorForm.style.display = 'block';
+function redirectToCreateSensor(){
+    clearInterval(timer);
+    document.getElementById('output').innerHTML = ''
+    localStorage.setItem('sensorList', JSON.stringify(sensorList));
+    localStorage.setItem('sensorMinValues', JSON.stringify(sensorMinValues));
+    localStorage.setItem('sensorMaxValues', JSON.stringify(sensorMaxValues));
+    window.location.href="create-sensor.html";
 }
 
-function addSensor(e){
-    e.preventDefault();
-    errorMsg =  [];
-    var sensorName = document.getElementById("newSensor").value;
+// Outputs a message based on the value selected from the sensorList
+function sensorSelection(){
+    sensor = document.getElementById('sensorsList');
+    document.getElementById('sensorSelected').innerHTML = 'You selected: ' + sensor.value;
+    let index = sensorList.indexOf(sensor.value);
+    min = sensorMinValues[index];
+    max = sensorMaxValues[index];
+    document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
+}
 
-    if(sensorList.includes(sensorName)){
-        console.log(`Sensor ${sensorName} already exist`)
-        errorMsg.push(`Sensor ${sensorName} already exist`);
-    }
-    if(sensorName === ""){
-        console.log(`Please enter a sensor name`)
-        errorMsg.push(`Please enter a sensor name`);
-    }
-    document.getElementById("errorMsg").innerHTML = errorMsg;
-
-    if(errorMsg.length > 0){
-        displayErrorMsg.style.display = 'contents';
-    }
-    else{
-        min = Number(document.getElementById('minValue').value);
-        max = Number(document.getElementById('maxValue').value);
-        sensorMinValues.push(min);
-        sensorMaxValues.push(max);
-        sensorList.push(sensorName);
-
-        var addSensorBtn = document.getElementById("addSensorBtn");
-        addSensorBtn.style.display = 'inline';
-    
-        var addSensorForm = document.getElementById("addSensorForm");
-        addSensorForm.style.display = 'none'
-    }
-
+function getSensorsList(){
+    clearInterval(timer);
+    document.getElementById('output').innerHTML = ''
 }
 
 /* When the start button is clicked then generate random numbers.
@@ -93,29 +62,10 @@ function addSensor(e){
  * While the start event is occurring, the min and max value will be displayed
  */
 document.getElementById('sensorsList').addEventListener('click', getSensorsList);
-document.getElementById('addSensorBtn').addEventListener('click', displaySensorForm);
-document.getElementById('addBtn').addEventListener('click', addSensor);
 document.getElementById('start').addEventListener('click', startRandomNumbers);
 document.getElementById('stop').addEventListener('click', stopRandomNumbers);
 document.getElementById('stop').addEventListener('click', saveData);
-document.getElementById('minValue').addEventListener('change', displayMsgRange);
-document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
-
-// Displays the range of the generated value
-function displayMsgRange(){
-    min = Number(document.getElementById('minValue').value);
-    max = Number(document.getElementById('maxValue').value);
-    if(min <= 0){
-        document.getElementById('minValue').value = 0;
-        min = 0
-    }
-    if(max < min){
-        document.getElementById('maxValue').value = min;
-        max = min
-    }
-    document.getElementById('msgRandomRange').innerHTML = 'Random numbers from ' + min + ' to ' + max + ':';
-}
 
 // Creates random numbers
 function startRandomNumbers(e){
@@ -157,7 +107,6 @@ function stopRandomNumbers(e){
 function saveData() {
     var numArray = randomNumbers.split(',');
     let numLength = numArray.length;
-    console.log(numArray);
     for (let i = 0; i < numLength; i++)
     {
         console.log('we are in saveData loop');

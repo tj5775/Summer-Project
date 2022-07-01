@@ -16,7 +16,7 @@
         <header id="main-header">
             <h1>Summer Project</h1>
         </header>
-        
+
         <!-- Section of code that contains the dropdown menu -->
         <div class="container">
             <!-- The left side contain's the drop down menu-->
@@ -25,13 +25,15 @@
                     <select id="sensorsList" onchange="sensorSelection()">
                         <option>--Select a sensor--</option>
                     </select>
-                    <button class="btn btn-primary" id="addSensorBtn">Add Sensor</button>
+                    <button onclick="redirectToCreateSensor()" type="button" class="btn btn-primary" style="display: inline;">
+                        Add Sensor</button>
+                    <!-- <button class="btn btn-primary" id="addSensorBtn">Add Sensor</button> -->
                     <div id="sensorSelected"></div>
-                    <div id="errorMsg" class="alert alert-danger" role="alert"></div>
+                    <!-- <div id="errorMsg" class="alert alert-danger" role="alert"></div> -->
                 </form>
                 
 
-                <div id="addSensorForm" style="text-align: left; padding-left: 20px;">
+                <!-- <div id="addSensorForm" style="text-align: left; padding-left: 20px;">
                     <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
                     <br>
                     Min: 
@@ -39,7 +41,7 @@
                     Max: 
                     <input type="number" value="0" id="maxValue">
                     <button class="btn btn-primary" id="addBtn">Add</button>
-                </div>
+                </div> -->
                 
             </div>
             <!-- The right side contain's the random number generator -->
