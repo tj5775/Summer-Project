@@ -85,3 +85,15 @@ input{
     height: 30px;
     width: 180px;
 }
+
+.centerForm{
+    padding: 5px;
+    width: 100%;
+    background-color: paleturquoise;
+    margin-right: 5px;
+    line-height: 2em;
+    font-weight: bold;
+    /* font-size: larger; */
+    border: 2px solid black;
+    text-align: center;
+}
