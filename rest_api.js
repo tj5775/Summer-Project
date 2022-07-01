@@ -22,7 +22,7 @@ app.post('/', (req, res)=> {
     console.log(sensorName);
     console.log(randomValue);
     let insertQuery = `insert into public.sensors(name, value) 
-                       values('${sensorName}', '${randomValue}')`
+                       values('${sensorName}', '${Number(randomValue)}')`
     console.log(insertQuery);
     client.query(insertQuery, (err, result)=>{
         if(!err){
@@ -32,7 +32,7 @@ app.post('/', (req, res)=> {
         else{ console.log(err.message)
               res.send('Insertion unsuccessful.') }
     })
-    client.end();
+    //client.end();
 })
 
 // Bind and listen to the connections on localhost and port
