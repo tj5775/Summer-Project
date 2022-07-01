@@ -1,73 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <!-- Contains metadata about the HTML document -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>First Assignment</title>
+        <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
-<head>
-    <!-- Contains metadata about the HTML document -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>First Assignment</title>
+        <!-- Links the CSS stylesheets to index.html -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css">
+        </head>
+    <body>
+        <!-- Header that contains the homepage title -->
+        <header id="main-header">
+            <h1>Summer Project</h1>
+        </header>
 
-    <!-- Links the CSS stylesheets to index.html -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="./styles.css">
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+        <!-- Section of code that contains the dropdown menu -->
+        <div class="container">
+            <!-- The left side contain's the drop down menu-->
+            <div class="leftSide">
+                <form>
+                    <select id="sensorsList" onchange="sensorSelection()">
+                        <option>--Select a sensor--</option>
+                    </select>
+                    <button onclick="redirectToCreateSensor()" type="button" class="btn btn-primary" style="display: inline;">
+                        Add Sensor</button>
+                    <!-- <button class="btn btn-primary" id="addSensorBtn">Add Sensor</button> -->
+                    <div id="sensorSelected"></div>
+                    <!-- <div id="errorMsg" class="alert alert-danger" role="alert"></div> -->
+                    </form>
 
-</head>
+                <!-- <div id="addSensorForm" style="text-align: left; padding-left: 20px;">
+                                                                    <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
+                                                                    <br>
+                                                                    Min: 
+                                                                    <input type="number" value="0" id="minValue">
+                                                                    Max: 
+                                                                    <input type="number" value="0" id="maxValue">
+                                                                    <button class="btn btn-primary" id="addBtn">Add</button>
+                </div> -->
+                
+                </div>
+                <!-- The right side contain's the random number generator -->
+                <div class="rightSide">
+                    <form>
+                        <!-- The button tags will create both the start and stop buttons -->
+                        <button class="btn btn-success" id="start">Start</button>
+                        <button class="btn btn-danger" id="stop">Stop</button>
+                    </form>
+                    <!-- JavasScript function will output the number range and the random value generated-->
+                    <div class="container2">
+                        <div id="msgRandomRange"></div>
+                        <div id="output"></div>
+                    </div>
+                </div>
+                </div>
 
-<body>
-    <!-- Header that contains the homepage title -->
-    <header id="main-header">
-        <h1>Summer Project</h1>
-    </header>
+        <!-- Footer that contains copyright information -->
+        <footer id="main-footer">
+            <p>Copyright &copy; 2022 Toscano & Ungos</p>
+        </footer>
 
-    <!-- Section of code that contains the dropdown menu -->
-    <div class="container">
-        <!-- The left side contain's the drop down menu-->
-        <div class="leftSide">
-            <form>
-                <select id="sensorsList" onchange="sensorSelection()">
-                    <option>--Select a sensor--</option>
-                </select>
-                <button class="btn btn-primary" id="addSensorBtn">Add Sensor</button>
-                <div id="sensorSelected"></div>
-                <div id="errorMsg" class="alert alert-danger" role="alert"></div>
-            </form>
-
-
-            <div id="addSensorForm" style="text-align: left; padding-left: 20px;">
-                <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
-                <br>
-                Min:
-                <input type="number" value="0" id="minValue">
-                Max:
-                <input type="number" value="0" id="maxValue">
-                <button class="btn btn-primary" id="addBtn">Add</button>
-            </div>
-
-        </div>
-        <!-- The right side contain's the random number generator -->
-        <div class="rightSide">
-            <form>
-                <!-- The button tags will create both the start and stop buttons -->
-                <button class="btn btn-success" id="start">Start</button>
-                <button class="btn btn-danger" id="stop">Stop</button>
-            </form>
-            <!-- JavasScript function will output the number range and the random value generated-->
-            <div class="container2">
-                <div id="msgRandomRange"></div>
-                <div id="output"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer that contains copyright information -->
-    <footer id="main-footer">
-        <p>Copyright &copy; 2022 Toscano & Ungos</p>
-    </footer>
-
-    <script src="main.js"></script>
-</body>
-
+        <script src="main.js"></script>
+        </body>
 </html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Contains metadata about the HTML document -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create New Sensor</title>
+
+    <!-- Links the CSS stylesheets to index.html -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Links the CSS stylesheets to index.html -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css"> -->
+</head>
+
+<body>
+    <!-- Header that contains the homepage title -->
+    <header id="main-header">
+        <h1>Summer Project</h1>
+    </header>
+    <div class="container">
+        <div class="centerForm">
+            <div id="errorMsg" class="alert alert-danger" role="alert"></div>
+            <div id="addSensorForm" style="padding-left: 20px;">
+                <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
+                <br>
+                Min:
+                <input type="number" value="0" id="minValue">
+                Max:
+                <input type="number" value="0" id="maxValue">
+                <button class="btn btn-primary" id="addBtn">Add</button>
+            </div>
+            <div id="sensorCreatedMsg">
+                <div id="msg"></div>
+                <button onclick="yesAdd()" class="btn btn-success">Yes</button>
+                <button onclick="noLeave()" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        var displayErrorMsg = document.getElementById("errorMsg");
+        displayErrorMsg.style.display = 'none';
+        var sensorCreatedMsg = document.getElementById('sensorCreatedMsg');
+        sensorCreatedMsg.style.display = 'none';
+        var addSensorForm = document.getElementById('addSensorForm')
+        var sensorList = JSON.parse(localStorage.getItem('sensorList'));
+        var sensorMinValues = JSON.parse(localStorage.getItem('sensorMinValues'));
+        var sensorMaxValues = JSON.parse(localStorage.getItem('sensorMaxValues'));
+        var errorMsg = [];
+
+        document.getElementById('addBtn').addEventListener('click', addSensor);
+        document.getElementById('minValue').addEventListener('change', displayMsgRange);
+        document.getElementById('maxValue').addEventListener('change', displayMsgRange);
+
+        function yesAdd() {
+            addSensorForm.style.display = 'block'
+            sensorCreatedMsg.style.display = 'none'
+        }
+
+        function noLeave() {
+            // e.preventDefault();
+            console.log('no')
+            localStorage.setItem('sensorList', JSON.stringify(sensorList));
+            localStorage.setItem('sensorMinValues', JSON.stringify(sensorMinValues));
+            localStorage.setItem('sensorMaxValues', JSON.stringify(sensorMaxValues));
+            window.location.href = "index.html";
+        }
+        function addSensor(e) {
+            e.preventDefault();
+            errorMsg = [];
+            var sensorName = document.getElementById("newSensor").value;
+
+            if (sensorName === "") {
+                errorMsg.push(`Please enter a sensor name`);
+            }
+            else if (sensorList.includes(sensorName)) {
+                errorMsg.push(`Sensor ${sensorName} already exist`);
+            }
+
+            document.getElementById("errorMsg").innerHTML = errorMsg;
+
+            if (errorMsg.length > 0) {
+                displayErrorMsg.style.display = 'contents';
+            }
+            else {
+                var min = Number(document.getElementById('minValue').value);
+                var max = Number(document.getElementById('maxValue').value);
+                sensorMinValues.push(min);
+                sensorMaxValues.push(max);
+                sensorList.push(sensorName);
+
+                document.getElementById("newSensor").value = '';
+                document.getElementById("minValue").value = 0;
+                document.getElementById("maxValue").value = 0;
+
+                addSensorForm.style.display = 'none'
+                document.getElementById('msg').innerHTML = `Sensor "${sensorName}" created successfully <br/>Do you want to create another sensor?`;
+                sensorCreatedMsg.style.display = 'block'
+            }
+        }
+
+        // Displays the range of the generated value
+        function displayMsgRange() {
+            min = Number(document.getElementById('minValue').value);
+            max = Number(document.getElementById('maxValue').value);
+            if (min <= 0) {
+                document.getElementById('minValue').value = 0;
+                min = 0
+            }
+            if (max < min) {
+                document.getElementById('maxValue').value = min;
+                max = min
+            }
+        }
+    </script>
+</body>
+
+</html>
