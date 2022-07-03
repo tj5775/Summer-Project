@@ -1,4 +1,3 @@
-//todo uncomment
 const client = require("./database.js");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -26,9 +25,6 @@ app.use(
 );
 app.use("/user", UserController);
 
-// Insert values into Postgres Table
-//todo uncomment
-
 app.post("/", (req, res) => {
   const { sensorName, randomValue } = req.body;
   console.log(sensorName);
@@ -49,7 +45,6 @@ app.post("/", (req, res) => {
 });
 
 // Bind and listen to the connections on localhost and port
-
 var online =
   "mongodb+srv://aramirez:Alex123@cluster0.bii1t.mongodb.net/smartcity?retryWrites=true&w=majority";
 
