@@ -155,3 +155,13 @@ function saveData() {
   }
   randomNumbers = "";
 }
+
+// function getData() {
+//   fetch("/", {
+//     method: "GET",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(data),
+//   }).then((res) => {
+//     console.log("Request complete! response:", res);
+//   });
+// }
