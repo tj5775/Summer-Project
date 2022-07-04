@@ -10,7 +10,7 @@ $.ajax({
   dataType: "JSON",
   success: function (res) {
     console.log(res);
-    $("#firstName").val(res.firsName);
+    $("#firstName").val(res.firstName);
     $("#lastName").val(res.lastName);
     $("#city").val(res.city);
     $("#state").val(res.state);

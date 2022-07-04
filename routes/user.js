@@ -165,5 +165,18 @@ async function getUserInfo(token) {
   );
   return user;
 }
-
+router.get("/profile", async (req, res, next) => {
+  if (!req.query.token) {
+    res.status(400).send("No token");
+  } else {
+    getUserInfo(req.query.token)
+      .then((user) => {
+        res.send(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.send(err);
+      });
+  }
+});
 module.exports = router;
