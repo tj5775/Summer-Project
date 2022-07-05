@@ -25,23 +25,45 @@ app.use(
 );
 app.use("/user", UserController);
 
+// app.post("/", (req, res) => {
+//   const { sensorName, randomValue } = req.body;
+//   console.log(sensorName);
+//   console.log(randomValue);
+//   let insertQuery = `insert into public.sensors(name, value) 
+//                        values('${sensorName}', '${Number(randomValue)}')`;
+//   console.log(insertQuery);
+//   client.query(insertQuery, (err, result) => {
+//     if (!err) {
+//       res.send("Insertion was successful");
+//       console.log(result);
+//     } else {
+//       console.log(err.message);
+//       res.send("Insertion unsuccessful.");
+//     }
+//   });
+//   //client.end();
+// });
+
 app.post("/", (req, res) => {
-  const { sensorName, randomValue } = req.body;
-  console.log(sensorName);
-  console.log(randomValue);
-  let insertQuery = `insert into public.sensors(name, value) 
-                       values('${sensorName}', '${Number(randomValue)}')`;
-  console.log(insertQuery);
-  client.query(insertQuery, (err, result) => {
-    if (!err) {
-      res.send("Insertion was successful");
-      console.log(result);
-    } else {
-      console.log(err.message);
-      res.send("Insertion unsuccessful.");
-    }
-  });
-  //client.end();
+    const { name, min, max, topic } = req.body;
+    // console.log(name);
+    // console.log(min);
+    // console.log(max);
+    // console.log(topic);
+    let insertQuery = `insert into public.sensors_meta_data(name, min, max, topic) 
+                        values('${name}', '${Number(min)}', '${Number(max)}', '${topic}')`;
+    console.log(insertQuery);
+    client.query(insertQuery, (err, result) => {
+      if (!err) {
+        res.send("Insertion was successful");
+        console.log(result);
+      } else {
+        console.log(err.message);
+        res.send("Insertion unsuccessful.");
+      }
+    });
+
+    //client.end();
 });
 
 // Bind and listen to the connections on localhost and port

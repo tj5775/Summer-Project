@@ -28,6 +28,8 @@
             <div id="addSensorForm" style="padding-left: 20px;">
                 <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
                 <br>
+                <input type="text" id="topic" class="sensorForm" placeholder="Enter topic">
+                <br>
                 Min:
                 <input type="number" value="0" id="minValue">
                 Max:
@@ -56,13 +58,31 @@
         document.getElementById('minValue').addEventListener('change', displayMsgRange);
         document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 
+        function saveSensor() {
+            console.log('in save sensor');
+            var sensor = document.getElementById('newSensor').value;
+            var minValue = document.getElementById('minValue').value;
+            var maxValue = document.getElementById('maxValue').value;
+            var topicValue = document.getElementById('topic').value;
+            // console.log('sensor: ' + sensor);
+            // console.log('min: ' + minValue);
+            // console.log('max: ' + maxValue);
+            // console.log('topic: ' + topicValue);
+            let data = {name: sensor, min: minValue, max: maxValue, topic: topicValue};
+            fetch("/",{
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data),
+            }).then((rest) => {
+                console.log("New Sensor saved successfully");
+            }).catch(e => console.log(e));
+        }
+
         function yesAdd() {
             addSensorForm.style.display = 'block'
             sensorCreatedMsg.style.display = 'none'
         }
-
         function noLeave() {
-            // e.preventDefault();
             console.log('no')
             localStorage.setItem('sensorList', JSON.stringify(sensorList));
             localStorage.setItem('sensorMinValues', JSON.stringify(sensorMinValues));
@@ -87,6 +107,7 @@
                 displayErrorMsg.style.display = 'contents';
             }
             else {
+                saveSensor();
                 var min = Number(document.getElementById('minValue').value);
                 var max = Number(document.getElementById('maxValue').value);
                 sensorMinValues.push(min);
