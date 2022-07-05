@@ -12,8 +12,30 @@ const UserController = require("./routes/user");
 // Render and load the HTML page
 app.use(express.static(__dirname + "/static"));
 
+// EJS template
+app.set('view engine', 'ejs');
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/summer-project/index.html");
+});
+
+app.get("/:userQuery", (req, res) => {
+
+  let getQuery = "SELECT value, date, sensors_values.sensor_id, sensors_meta_data.name, sensors_meta_data.min, " +
+                 "sensors_meta_data.max, sensors_meta_data.topic " +
+                 "FROM sensors_values " +
+                 "INNER JOIN sensors_meta_data " +
+                 "ON sensors_values.sensor_id = sensors_meta_data.sensor_id " +
+                 "ORDER BY name;";
+  console.log(getQuery);
+  client.query(getQuery, (err, result) => {
+    if (!err) {
+      console.log(result);
+      res.render('my-sensors', {dataQuery: result.rows});
+    } else {
+      console.log(err.message);
+    }
+  });
 });
 
 app.use(bodyParser.json());
