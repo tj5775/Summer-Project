@@ -21,11 +21,11 @@ app.get("/", (req, res) => {
 
 app.get("/:userQuery", (req, res) => {
 
-  let getQuery = "SELECT value, date, sensors_values.sensor_id, sensors_meta_data.name, sensors_meta_data.min, " +
-                 "sensors_meta_data.max, sensors_meta_data.topic " +
-                 "FROM sensors_values " +
-                 "INNER JOIN sensors_meta_data " +
-                 "ON sensors_values.sensor_id = sensors_meta_data.sensor_id " +
+  let getQuery = "SELECT sensors_values.value, sensors_values.date, sensors_meta_data.sensor_id, name, min, " +
+                 "max, topic " +
+                 "FROM sensors_meta_data " +
+                 "INNER JOIN sensors_values " +
+                 "ON sensors_meta_data.sensor_id = sensors_values.sensor_id " +
                  "ORDER BY name;";
   console.log(getQuery);
   client.query(getQuery, (err, result) => {
