@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/summer-project/index.html");
 });
 
-app.get("/:userQuery", (req, res) => {
+app.get("/my-sensors", (req, res) => {
 
   let getQuery = "SELECT sensors_values.value, sensors_values.date, sensors_meta_data.sensor_id, name, min, " +
                  "max, topic " +
