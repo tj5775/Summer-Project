@@ -44,12 +44,12 @@ app.use("/user", UserController);
 //   //client.end();
 // });
 
-app.post("/", (req, res) => {
+app.post("/createsensor", (req, res) => {
     const { name, min, max, topic } = req.body;
-    // console.log(name);
-    // console.log(min);
-    // console.log(max);
-    // console.log(topic);
+    console.log(name);
+    console.log(min);
+    console.log(max);
+    console.log(topic);
     let insertQuery = `insert into public.sensors_meta_data(name, min, max, topic) 
                         values('${name}', '${Number(min)}', '${Number(max)}', '${topic}')`;
     console.log(insertQuery);
@@ -62,8 +62,27 @@ app.post("/", (req, res) => {
         res.send("Insertion unsuccessful.");
       }
     });
-
     //client.end();
+});
+
+app.get("/getSensors", (req, res) => {
+  // client.connect();
+  let insertQuery = `select * from public.sensors_meta_data`
+  console.log(insertQuery);
+  client.query(insertQuery, (err, result) => {
+    if(!err){
+      console.log('insertion was successful.');
+      // res.send("Insertion was successful.");
+      console.log(result);
+      res.send(result);
+    }
+    else{
+      console.log(err.message);
+      return err.message;
+      // res.send("Insertion was unsuccessful.")
+    }
+  })
+  // client.end();
 });
 
 // Bind and listen to the connections on localhost and port

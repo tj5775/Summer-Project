@@ -59,7 +59,6 @@
         document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 
         function saveSensor() {
-            console.log('in save sensor');
             var sensor = document.getElementById('newSensor').value;
             var minValue = document.getElementById('minValue').value;
             var maxValue = document.getElementById('maxValue').value;
@@ -69,13 +68,34 @@
             // console.log('max: ' + maxValue);
             // console.log('topic: ' + topicValue);
             let data = {name: sensor, min: minValue, max: maxValue, topic: topicValue};
-            fetch("/",{
+            fetch("/createsensor",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data),
             }).then((rest) => {
                 console.log("New Sensor saved successfully");
             }).catch(e => console.log(e));
+        }
+
+        function getSensors() {
+            var dbData;
+            fetch("/getSensors")
+            .then(response => {
+                    console.log('in get sensors -successful-')
+                    if(!response.ok){
+                        throw new Error(`HTTP error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+            .then(data => {
+                console.log('in get sensors -successful2-');
+                console.log(data);
+            })
+            .catch(err => console.error(err));
+            // .then(post => {
+            //     console.log('name: ' + post.name)
+            // })
+            
         }
 
         function yesAdd() {
@@ -108,6 +128,7 @@
             }
             else {
                 saveSensor();
+                getSensors();
                 var min = Number(document.getElementById('minValue').value);
                 var max = Number(document.getElementById('maxValue').value);
                 sensorMinValues.push(min);
