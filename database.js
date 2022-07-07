@@ -17,7 +17,7 @@ client.connect(function(err) {
         if (err) throw err;
         console.log(result)
     })
-    query = "CREATE TABLE IF NOT EXISTS Sensors_values(sensor_id SERIAL PRIMARY KEY, value INT NOT NULL, date TIMESTAMP(0) DEFAULT now(), FOREIGN KEY(sensor_id) REFERENCES Sensors_meta_data(sensor_id))";
+    query = "CREATE TABLE IF NOT EXISTS Sensors_values(value_id SERIAL PRIMARY KEY, sensor_id INT NOT NULL, value INT NOT NULL, date TIMESTAMP(0) DEFAULT now(), FOREIGN KEY(sensor_id) REFERENCES Sensors_meta_data(sensor_id))";
     client.query(query, (err, result) => {
         if (err) throw err;
         console.log(result)
