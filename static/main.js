@@ -93,9 +93,7 @@ function getSensorsList() {
  * When the stop button is clicked then stop generating random numbers
  * While the start event is occurring, the min and max value will be displayed
  */
-document
-  .getElementById("sensorsList")
-  .addEventListener("click", getSensorsList);
+document.getElementById("sensorsList").addEventListener("click", getSensorsList);
 document.getElementById("start").addEventListener("click", startRandomNumbers);
 document.getElementById("stop").addEventListener("click", stopRandomNumbers);
 document.getElementById("stop").addEventListener("click", saveData);
