@@ -38,6 +38,32 @@ app.get("/my-sensors", (req, res) => {
   });
 });
 
+app.get("/generate-data", (req, res) => {
+
+  let getQuery = "SELECT * FROM sensors_meta_data";
+  client.query(getQuery, (err, result) => {
+    if (!err) {
+      res.render('generate-data', {dataQuery: result.rows});
+    } else {
+      console.log(err.message);
+    }
+  });
+});
+
+
+app.get("/getMetaData", (req, res) => {
+
+  let getQuery = "SELECT * FROM sensors_meta_data";
+  client.query(getQuery, (err, result) => {
+    if (!err) {
+      console.log('Data retrieval successful');
+      res.send(result);
+    } else {
+      console.log('Data retrieval unsucessful');
+    }
+  });
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
@@ -47,24 +73,24 @@ app.use(
 );
 app.use("/user", UserController);
 
-// app.post("/", (req, res) => {
-//   const { sensorName, randomValue } = req.body;
-//   console.log(sensorName);
-//   console.log(randomValue);
-//   let insertQuery = `insert into public.sensors(name, value) 
-//                        values('${sensorName}', '${Number(randomValue)}')`;
-//   console.log(insertQuery);
-//   client.query(insertQuery, (err, result) => {
-//     if (!err) {
-//       res.send("Insertion was successful");
-//       console.log(result);
-//     } else {
-//       console.log(err.message);
-//       res.send("Insertion unsuccessful.");
-//     }
-//   });
-//   //client.end();
-// });
+app.post("/saveGeneratedData", (req, res) => {
+  const { sensor_ID, randomValue } = req.body;
+  console.log(sensor_ID);
+  console.log(randomValue);
+  let insertQuery = `insert into public.sensors_values(sensor_id, value) 
+                       values('${sensor_ID}', '${Number(randomValue)}')`;
+  console.log(insertQuery);
+  client.query(insertQuery, (err, result) => {
+    if (!err) {
+      res.send("Insertion was successful");
+      console.log(result);
+    } else {
+      console.log(err.message);
+      res.send("Insertion unsuccessful.");
+    }
+  });
+  //client.end();
+});
 
 app.post("/", (req, res) => {
     const { name, min, max, topic } = req.body;
