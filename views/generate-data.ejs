@@ -173,26 +173,26 @@
                             <h6 class="m-0 font-weight-bold text-primary">Add Sensor Data</h6>                             
                         </div>
                         <div class="card-body">
-                            <div id="sensor-add">
-                                <label for="sensors">Choose a sensor:</label>
-                                <select name="sensors" id="sensors">
-                                    <% for (data of dataQuery) { %>
-                                        <option value="none" selected disabled hidden>Select a sensor</option>
-                                        <option><%= data.name %> </option>                                    
-                                    <% } %>
+                            <div class="text-center justify-content-center font-weight-bold">
+                                <label for="sensor">Choose a sensor:</label>
+                                <select name="sensor" id="sensor" onchange="generateData()">
+                                    <option value="none" selected disabled hidden>Select a sensor</option>
+                                    <% for (let i = 0; i < dataQuery.length; i++) { %>
+                                        <option value = <%= i %>><%=dataQuery[i].sensor_id + ". " +  dataQuery[i].name + ", " +  dataQuery[i].topic + ", " +  dataQuery[i].min + ", " +  dataQuery[i].max %> </option>                                    
+                                        <% } %>
                                 </select>
-                                <label for="topic">Select a topic: </label>
-                                <select name="topic" id="topic">
-                                    <% for (data of dataQuery) { %>
-                                        <option value="none" selected disabled hidden>Select a topic</option>
-                                        <option><%= data.topic %></option>
-                                    <% } %>
-                                </select>
-                                <button class="btn btn-success" id="start" >Start</button>
-                                <button class="btn btn-danger" id="stop">Stop</button>
+                                    <button class="btn btn-success" id="start">Start</button>
+                                    <button class="btn btn-danger" id="stop">Stop</button>
                             </div>
                         </div>
-                     </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <!-- Displays the new added elements if insertion was sucessful-->
+                            <div id = "dataOuput"></div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -238,7 +238,97 @@
         </div>
     </div>
 
-    <script src="main.js"></script>
+    <script>
+
+        // Variables that store the values for time, min, and max.
+        var timer;
+        var min = 0;
+        var max = 0;
+        var name = "";
+        var topic = "";
+        var sensorID = 0;
+        var randomNumber;
+        var randomNumbers = "";
+        let index;
+
+        document.getElementById("start").addEventListener("click", startRandomNumbers);
+        document.getElementById("stop").addEventListener("click", stopRandomNumbers);
+        document.getElementById("stop").addEventListener("click", saveData);
+
+        // Generating random data
+        async function generateData() {
+            var response = await fetch("/getMetaData");
+            if(!response) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+            return null;
+            }
+            else {
+            const records = await response.json();
+            sensorID = records.rows[index].sensor_id;
+            name = records.rows[index].name;
+            min = records.rows[index].min;
+            max = records.rows[index].max;
+            topic = records.rows[index].topic;
+            }
+        }
+
+        // Creates random numbers
+        function startRandomNumbers(e) {
+            e.preventDefault();
+            alert("Generating random numbers");
+            randomNumber = generateRandomNumbers();
+            console.log(randomNumber);
+            randomNumbers += randomNumber + ", ";
+            timer = setInterval(function () {
+                randomNumber = generateRandomNumbers();
+                randomNumbers += randomNumber + ", ";
+                console.log(randomNumbers);
+            }, 1000);
+        }
+
+        // Generates a random number with the range of the min and max values
+        function generateRandomNumbers() {
+            // find diff
+            let difference = max - min + 1;
+            // generate random number
+            let rand = Math.random();
+            // multiply with difference
+            rand = Math.floor(rand * difference);
+
+            // add with min value
+            rand = rand + min;
+            return rand;
+        }
+
+        // Stops generating random numbers
+        function stopRandomNumbers(e) {
+            e.preventDefault();
+            // removes the last ', ' in the string
+            randomNumbers = randomNumbers.slice(0, -2);
+            clearInterval(timer);
+            alert("Stop generating random numbers. Check My Sensors page!");
+        }
+
+        // Saves a random number
+        function saveData() {
+        var numArray = randomNumbers.split(",");
+        let numLength = numArray.length;
+        for (let i = 0; i < numLength; i++) {
+            let data = { sensor_ID: sensorID, randomValue: numArray[i] };
+            console.log(`Generated value: ${numArray[i]} | Stored at row: ${Number(index+1)}`);
+            fetch("/saveGeneratedData", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+            }).then((res) => {
+            console.log("Request complete! response:", res);
+            });
+        }
+        randomNumbers = "";
+        }
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="template/vendor/jquery/jquery.min.js"></script>
     <script src="template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
