@@ -265,6 +265,7 @@
             }
             else {
             const records = await response.json();
+            index = document.getElementById("sensor").value;
             sensorID = records.rows[index].sensor_id;
             name = records.rows[index].name;
             min = records.rows[index].min;
@@ -307,7 +308,7 @@
             // removes the last ', ' in the string
             randomNumbers = randomNumbers.slice(0, -2);
             clearInterval(timer);
-            alert("Stop generating random numbers. Check My Sensors page!");
+            alert("Stopped generating random numbers. Check My Sensors page!");
         }
 
         // Saves a random number

@@ -40,7 +40,7 @@ app.get("/my-sensors", (req, res) => {
 
 app.get("/generate-data", (req, res) => {
 
-  let getQuery = "SELECT * FROM sensors_meta_data";
+  let getQuery = "SELECT * FROM Sensors_meta_data";
   client.query(getQuery, (err, result) => {
     if (!err) {
       res.render('generate-data', {dataQuery: result.rows});
@@ -53,7 +53,7 @@ app.get("/generate-data", (req, res) => {
 
 app.get("/getMetaData", (req, res) => {
 
-  let getQuery = "SELECT * FROM sensors_meta_data";
+  let getQuery = "SELECT * FROM Sensors_meta_data";
   client.query(getQuery, (err, result) => {
     if (!err) {
       console.log('Data retrieval successful');
