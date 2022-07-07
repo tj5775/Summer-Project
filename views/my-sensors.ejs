@@ -92,7 +92,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sensor options:</h6>
                         <a class="collapse-item" href="create-sensor.html">Create Sensors</a>
-                        <a class="collapse-item" href="generate-data.html">Generate Sensor Data</a>
+                        <a class="collapse-item" href="generate-data">Generate Sensor Data</a>
                         <a class="collapse-item" href="my-sensors">My Sensors</a>
                     </div>
                 </div>
@@ -166,33 +166,7 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">My Sensor Data</h1>
-                    <p class="mb-4">Here are all sensors that you have created. Press start or stop to continue adding data to a selected sensor.</p>
-
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">          
-                            <h6 class="m-0 font-weight-bold text-primary">Add Sensor Data</h6>                             
-                        </div>
-                        <div class="card-body">
-                            <div id="sensor-add">
-                                <label for="sensors">Choose a sensor:</label>
-                                <select name="sensors" id="sensors">
-                                    <% for (data of dataQuery) { %>
-                                        <option value="none" selected disabled hidden>Select a sensor</option>
-                                        <option><%= data.name %> </option>                                    
-                                    <% } %>
-                                </select>
-                                <label for="topic">Select a topic: </label>
-                                <select name="topic" id="topic">
-                                    <% for (data of dataQuery) { %>
-                                        <option value="none" selected disabled hidden>Select a topic</option>
-                                        <option><%= data.topic %></option>
-                                    <% } %>
-                                </select>
-                                <button class="btn btn-success" id="start" >Start</button>
-                                <button class="btn btn-danger" id="stop">Stop</button>
-                            </div>
-                        </div>
-                     </div>
+                    <p class="mb-4">Here are all sensors that you have created. The table below shows all the data sensors you have created.</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
