@@ -9,11 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Create Sensors</title>
-
-    <!-- Links the CSS stylesheets to index.html -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Generate Sensor Data</title>
 
     <!-- Used for start/stop buttons --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -27,8 +23,7 @@
 
     <!-- Custom styles for this page -->
     <link href="template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<!-- MQTT library -->
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -170,35 +165,34 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Create Sensors</h1>
-                    <p class="mb-4">Enter data into each field to create a new sensor.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Generate Data</h1>
+                    <p class="mb-4">Add more data to your sensor list! Use the sensors and topics you have created to enter more data.</p>
 
-                    <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">          
-                                <h6 class="m-0 font-weight-bold text-primary">Sensor information: </h6>                            
+                            <h6 class="m-0 font-weight-bold text-primary">Add Sensor Data</h6>                             
                         </div>
                         <div class="card-body">
-                            <div class="copyright text-center my-auto">
-                                <div id="errorMsg" class="alert alert-danger" role="alert"></div>
-                                <div id="addSensorForm" style="padding-left: 20px;">
-                                    <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
-                                    <input type="text" id="topic" class="sensorForm" placeholder="Enter topic">
-                                    Min:
-                                    <input type="number" value="0" id="minValue" style="width: 70px;">
-                                    Max:
-                                    <input type="number" value="0" id="maxValue" style="width: 70px;">
-                                    <button class="btn btn-primary" id="addBtn">Add</button>
-                                </div>
-                                <div id="sensorCreatedMsg">
-                                    <div id="msg"></div>
-                                    <button onclick="yesAdd()" class="btn btn-success">Yes</button>
-                                    <button onclick="noLeave()" class="btn btn-danger">No</button>
-                                </div>
+                            <div class="text-center justify-content-center font-weight-bold">
+                                <label for="sensor">Choose a sensor:</label>
+                                <select name="sensor" id="sensor" onchange="generateData()">
+                                    <option value="none" selected disabled hidden>Select a sensor</option>
+                                    <% for (let i = 0; i < dataQuery.length; i++) { %>
+                                        <option value = <%= i %>><%=dataQuery[i].sensor_id + ". " +  dataQuery[i].name + ", " +  dataQuery[i].topic + ", " +  dataQuery[i].min + ", " +  dataQuery[i].max %> </option>                                    
+                                        <% } %>
+                                </select>
+                                    <button class="btn btn-success" id="start">Start</button>
+                                    <button class="btn btn-danger" id="stop">Stop</button>
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <!-- Displays the new added elements if insertion was sucessful-->
+                            <div id = "dataOuput"></div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -245,135 +239,97 @@
     </div>
 
     <script>
-        var displayErrorMsg = document.getElementById("errorMsg");
-        displayErrorMsg.style.display = 'none';
-        var sensorCreatedMsg = document.getElementById('sensorCreatedMsg');
-        sensorCreatedMsg.style.display = 'none';
-        var addSensorForm = document.getElementById('addSensorForm')
-        var errorMsg = [];
 
-        document.getElementById('addBtn').addEventListener('click', addSensor);
-        document.getElementById('minValue').addEventListener('change', displayMsgRange);
-        document.getElementById('maxValue').addEventListener('change', displayMsgRange);
+        // Variables that store the values for time, min, and max.
+        var timer;
+        var min = 0;
+        var max = 0;
+        var name = "";
+        var topic = "";
+        var sensorID = 0;
+        var randomNumber;
+        var randomNumbers = "";
+        let index;
 
-        // It creates a new record in the sensors_meta_data table using a fetch post request
-        function saveSensor() {
-            var sensor = document.getElementById('newSensor').value;
-            var minValue = document.getElementById('minValue').value;
-            var maxValue = document.getElementById('maxValue').value;
-            var topicValue = document.getElementById('topic').value;
+        document.getElementById("start").addEventListener("click", startRandomNumbers);
+        document.getElementById("stop").addEventListener("click", stopRandomNumbers);
+        document.getElementById("stop").addEventListener("click", saveData);
 
-            let data = {name: String(sensor).toUpperCase(), min: Number(minValue), max: Number(maxValue), topic: String(topicValue).toUpperCase()};
-            fetch("/createsensor",{
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(data),
-            }).then((rest) => {
-                console.log("New Sensor saved successfully");
-            }).catch(e => console.log(e));
+        // Generating random data
+        async function generateData() {
+            var response = await fetch("/getMetaData");
+            if(!response) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+            return null;
+            }
+            else {
+            const records = await response.json();
+            index = document.getElementById("sensor").value;
+            sensorID = records.rows[index].sensor_id;
+            name = records.rows[index].name;
+            min = records.rows[index].min;
+            max = records.rows[index].max;
+            topic = records.rows[index].topic;
+            }
         }
 
-        // It returns all sensor's data using a fetch get request
-        /*async function getSensorNames() {
-            var response = await fetch("/getSensorNames");
-            if(!response.ok){
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-                return null;
-            }
-            else{
-                const records = await response.json();
-                return records.rows;
-            }
-            
-        }*/
-
-        // It returns the number of records a sensor name and topic are found in the DB
-        async function sensorTopicExists(sensorName, topic) {
-            const response = await fetch("/topicExists/" + sensorName + "/" + topic);
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-                return -1;
-            }
-            else{
-                const records = await response.json();
-                return records.rows[0].count;
-            }
-            
-        }
-
-        // If the user wants to create more sensors
-        function yesAdd() {
-            addSensorForm.style.display = 'block'
-            sensorCreatedMsg.style.display = 'none'
-        }
-
-        // if the user does not want to create more sensors
-        function noLeave() {
-            window.location.href = "index.html";
-        }
-
-        // it is executed when the user click add sensor
-        async function addSensor(e) {
+        // Creates random numbers
+        function startRandomNumbers(e) {
             e.preventDefault();
-            errorMsg = [];
-            var sensorName = String(document.getElementById("newSensor").value).toUpperCase();
-            var topicValue = String(document.getElementById('topic').value).toUpperCase();
-
-            if (sensorName === "" && topicValue === "") {
-                errorMsg.push(`Please enter a sensor name and a topic`);
-            }
-            else if (sensorName === "") {
-                errorMsg.push(`Please enter a sensor name`);
-            }
-            else if (topicValue === "") {
-                errorMsg.push(`Please enter a topic`);
-            }
-            else {
-                var recordsNumb = await sensorTopicExists(sensorName, topicValue);
-                if (recordsNumb > 0) {
-                    errorMsg.push(`Sensor ${sensorName} with topic ${topicValue} already exist`);
-                }
-            }
-
-            document.getElementById("errorMsg").innerHTML = errorMsg;
-
-            if (errorMsg.length > 0) {
-                displayErrorMsg.style.display = 'contents';
-            }
-            else {
-                saveSensor();
-                // var sensorNames = await getSensorNames();
-                // console.log('names: ');
-                // console.log(sensorNames);
-                document.getElementById("newSensor").value = '';
-                document.getElementById("topic").value = '';
-                document.getElementById("minValue").value = 0;
-                document.getElementById("maxValue").value = 0;
-
-                addSensorForm.style.display = 'none'
-                document.getElementById('msg').innerHTML = `Sensor "${sensorName}" created successfully <br/>Do you want to create another sensor?`;
-                sensorCreatedMsg.style.display = 'block'
-            }
+            alert("Generating random numbers");
+            randomNumber = generateRandomNumbers();
+            console.log(randomNumber);
+            randomNumbers += randomNumber + ", ";
+            timer = setInterval(function () {
+                randomNumber = generateRandomNumbers();
+                randomNumbers += randomNumber + ", ";
+                console.log(randomNumbers);
+            }, 1000);
         }
 
-        // Displays the range of the generated value
-        function displayMsgRange() {
-            min = Number(document.getElementById('minValue').value);
-            max = Number(document.getElementById('maxValue').value);
-            if (min <= 0) {
-                document.getElementById('minValue').value = 0;
-                min = 0
-            }
-            if (max < min) {
-                document.getElementById('maxValue').value = min;
-                max = min
-            }
+        // Generates a random number with the range of the min and max values
+        function generateRandomNumbers() {
+            // find diff
+            let difference = max - min + 1;
+            // generate random number
+            let rand = Math.random();
+            // multiply with difference
+            rand = Math.floor(rand * difference);
+
+            // add with min value
+            rand = rand + min;
+            return rand;
+        }
+
+        // Stops generating random numbers
+        function stopRandomNumbers(e) {
+            e.preventDefault();
+            // removes the last ', ' in the string
+            randomNumbers = randomNumbers.slice(0, -2);
+            clearInterval(timer);
+            alert("Stopped generating random numbers. Check My Sensors page!");
+        }
+
+        // Saves a random number
+        function saveData() {
+        var numArray = randomNumbers.split(",");
+        let numLength = numArray.length;
+        for (let i = 0; i < numLength; i++) {
+            let data = { sensor_ID: sensorID, randomValue: numArray[i] };
+            console.log(`Generated value: ${numArray[i]} | Stored at row: ${Number(index+1)}`);
+            fetch("/saveGeneratedData", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+            }).then((res) => {
+            console.log("Request complete! response:", res);
+            });
+        }
+        randomNumbers = "";
         }
     </script>
 
-    <script src="main.js"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="template/vendor/jquery/jquery.min.js"></script>
     <script src="template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
