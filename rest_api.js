@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/summer-project/index.html");
 });
 
-app.get("/:userQuery", (req, res) => {
+app.get("/my-sensors", (req, res) => {
 
   let getQuery = "SELECT sensors_values.value, sensors_values.date, sensors_meta_data.sensor_id, name, min, " +
                  "max, topic " +
@@ -47,45 +47,68 @@ app.use(
 );
 app.use("/user", UserController);
 
-// app.post("/", (req, res) => {
-//   const { sensorName, randomValue } = req.body;
-//   console.log(sensorName);
-//   console.log(randomValue);
-//   let insertQuery = `insert into public.sensors(name, value) 
-//                        values('${sensorName}', '${Number(randomValue)}')`;
-//   console.log(insertQuery);
-//   client.query(insertQuery, (err, result) => {
-//     if (!err) {
-//       res.send("Insertion was successful");
-//       console.log(result);
-//     } else {
-//       console.log(err.message);
-//       res.send("Insertion unsuccessful.");
-//     }
-//   });
-//   //client.end();
-// });
-
 app.post("/", (req, res) => {
+  const { sensorName, randomValue } = req.body;
+  console.log(sensorName);
+  console.log(randomValue);
+  let insertQuery = `insert into public.sensors(name, value) 
+                       values('${sensorName}', '${Number(randomValue)}')`;
+  console.log(insertQuery);
+  client.query(insertQuery, (err, result) => {
+    if (!err) {
+      res.send("Insertion was successful");
+      // console.log(result);
+    } else {
+      console.log(err.message);
+      res.send("Insertion unsuccessful.");
+    }
+  });
+});
+
+// It creates a new record in the sensors_meta_data table
+app.post("/createsensor", (req, res) => {
     const { name, min, max, topic } = req.body;
-    // console.log(name);
-    // console.log(min);
-    // console.log(max);
-    // console.log(topic);
     let insertQuery = `insert into public.sensors_meta_data(name, min, max, topic) 
-                        values('${name}', '${Number(min)}', '${Number(max)}', '${topic}')`;
-    console.log(insertQuery);
+                        values('${name}', '${min}', '${max}', '${topic}');`;
     client.query(insertQuery, (err, result) => {
       if (!err) {
         res.send("Insertion was successful");
-        console.log(result);
       } else {
         console.log(err.message);
         res.send("Insertion unsuccessful.");
       }
     });
+});
 
-    //client.end();
+// It returns all the data from the sensors_meta_data table
+/*app.get("/getSensorNames", (req, res) => {
+  let insertQuery = `select * from public.sensors_meta_data;`
+  client.query(insertQuery, (err, result) => {
+    if(!err){
+      console.log('insertion was successful.');
+      res.send(result);
+    }
+    else{
+      console.log(err.message);
+      return err.message;
+    }
+  })
+});*/
+
+// It returns the number of records where name = name and topic = topic in the DB
+app.get("/topicExists/:name/:topic", (req, res) => {
+  var name = req.params.name;
+  var topic = req.params.topic;
+  let insertQuery = `SELECT COUNT(*) FROM public.sensors_meta_data WHERE name = '${name}' AND topic = '${topic}';`;
+  client.query(insertQuery, (err, result) => {
+    if(!err){
+      res.send(result);
+    }
+    else{
+      console.log(err.message);
+      return err.message;
+    }
+  })
 });
 
 // Bind and listen to the connections on localhost and port

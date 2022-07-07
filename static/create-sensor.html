@@ -183,9 +183,9 @@
                                     <input type="text" id="newSensor" class="sensorForm" placeholder="Enter new sensor name">
                                     <input type="text" id="topic" class="sensorForm" placeholder="Enter topic">
                                     Min:
-                                    <input type="number" value="0" id="minValue">
+                                    <input type="number" value="0" id="minValue" style="width: 70px;">
                                     Max:
-                                    <input type="number" value="0" id="maxValue">
+                                    <input type="number" value="0" id="maxValue" style="width: 70px;">
                                     <button class="btn btn-primary" id="addBtn">Add</button>
                                 </div>
                                 <div id="sensorCreatedMsg">
@@ -248,27 +248,21 @@
         var sensorCreatedMsg = document.getElementById('sensorCreatedMsg');
         sensorCreatedMsg.style.display = 'none';
         var addSensorForm = document.getElementById('addSensorForm')
-        var sensorList = JSON.parse(localStorage.getItem('sensorList'));
-        var sensorMinValues = JSON.parse(localStorage.getItem('sensorMinValues'));
-        var sensorMaxValues = JSON.parse(localStorage.getItem('sensorMaxValues'));
         var errorMsg = [];
 
         document.getElementById('addBtn').addEventListener('click', addSensor);
         document.getElementById('minValue').addEventListener('change', displayMsgRange);
         document.getElementById('maxValue').addEventListener('change', displayMsgRange);
 
+        // It creates a new record in the sensors_meta_data table using a fetch post request
         function saveSensor() {
-            console.log('in save sensor');
             var sensor = document.getElementById('newSensor').value;
             var minValue = document.getElementById('minValue').value;
             var maxValue = document.getElementById('maxValue').value;
             var topicValue = document.getElementById('topic').value;
-            // console.log('sensor: ' + sensor);
-            // console.log('min: ' + minValue);
-            // console.log('max: ' + maxValue);
-            // console.log('topic: ' + topicValue);
-            let data = {name: sensor, min: minValue, max: maxValue, topic: topicValue};
-            fetch("/",{
+
+            let data = {name: String(sensor).toUpperCase(), min: Number(minValue), max: Number(maxValue), topic: String(topicValue).toUpperCase()};
+            fetch("/createsensor",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data),
@@ -277,27 +271,68 @@
             }).catch(e => console.log(e));
         }
 
+        // It returns all sensor's data using a fetch get request
+        /*async function getSensorNames() {
+            var response = await fetch("/getSensorNames");
+            if(!response.ok){
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+                return null;
+            }
+            else{
+                const records = await response.json();
+                return records.rows;
+            }
+            
+        }*/
+
+        // It returns the number of records a sensor name and topic are found in the DB
+        async function sensorTopicExists(sensorName, topic) {
+            const response = await fetch("/topicExists/" + sensorName + "/" + topic);
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+                return -1;
+            }
+            else{
+                const records = await response.json();
+                return records.rows[0].count;
+            }
+            
+        }
+
+        // If the user wants to create more sensors
         function yesAdd() {
             addSensorForm.style.display = 'block'
             sensorCreatedMsg.style.display = 'none'
         }
+
+        // if the user does not want to create more sensors
         function noLeave() {
-            console.log('no')
-            localStorage.setItem('sensorList', JSON.stringify(sensorList));
-            localStorage.setItem('sensorMinValues', JSON.stringify(sensorMinValues));
-            localStorage.setItem('sensorMaxValues', JSON.stringify(sensorMaxValues));
             window.location.href = "index.html";
         }
-        function addSensor(e) {
+
+        // it is executed when the user click add sensor
+        async function addSensor(e) {
             e.preventDefault();
             errorMsg = [];
-            var sensorName = document.getElementById("newSensor").value;
+            var sensorName = String(document.getElementById("newSensor").value).toUpperCase();
+            var topicValue = String(document.getElementById('topic').value).toUpperCase();
 
-            if (sensorName === "") {
+            if (sensorName === "" && topicValue === "") {
+                errorMsg.push(`Please enter a sensor name and a topic`);
+            }
+            else if (sensorName === "") {
                 errorMsg.push(`Please enter a sensor name`);
             }
-            else if (sensorList.includes(sensorName)) {
-                errorMsg.push(`Sensor ${sensorName} already exist`);
+            else if (topicValue === "") {
+                errorMsg.push(`Please enter a topic`);
+            }
+            else {
+                var recordsNumb = await sensorTopicExists(sensorName, topicValue);
+                if (recordsNumb > 0) {
+                    errorMsg.push(`Sensor ${sensorName} with topic ${topicValue} already exist`);
+                }
             }
 
             document.getElementById("errorMsg").innerHTML = errorMsg;
@@ -307,13 +342,11 @@
             }
             else {
                 saveSensor();
-                var min = Number(document.getElementById('minValue').value);
-                var max = Number(document.getElementById('maxValue').value);
-                sensorMinValues.push(min);
-                sensorMaxValues.push(max);
-                sensorList.push(sensorName);
-
+                // var sensorNames = await getSensorNames();
+                // console.log('names: ');
+                // console.log(sensorNames);
                 document.getElementById("newSensor").value = '';
+                document.getElementById("topic").value = '';
                 document.getElementById("minValue").value = 0;
                 document.getElementById("maxValue").value = 0;
 

@@ -28,47 +28,47 @@ client.on("message", function (topic, payload) {
   var string = new TextDecoder("utf-8").decode(payload);
   string = string.replace("\0", "");
 
-  let data = JSON.parse(string.trim());
-  console.log("Random Number -- " + data.randomNum);
-  console.log("\n");
+  // let data = JSON.parse(string.trim());
+  // console.log("Random Number -- " + data.randomNum);
+  // console.log("\n");
 });
 //----------------------------------------------------->
-if (localStorage.getItem("sensorList") != null) {
-  sensorList = JSON.parse(localStorage.getItem("sensorList"));
-}
+// if (localStorage.getItem("sensorList") != null) {
+//   sensorList = JSON.parse(localStorage.getItem("sensorList"));
+// }
 
-var sensorMinValues = [0, 3, 2];
-if (localStorage.getItem("sensorMinValues") != null) {
-  sensorMinValues = JSON.parse(localStorage.getItem("sensorMinValues"));
-}
+// var sensorMinValues = [0, 3, 2];
+// if (localStorage.getItem("sensorMinValues") != null) {
+//   sensorMinValues = JSON.parse(localStorage.getItem("sensorMinValues"));
+// }
 
-var sensorMaxValues = [5, 8, 12];
-if (localStorage.getItem("sensorMaxValues") != null) {
-  sensorMaxValues = JSON.parse(localStorage.getItem("sensorMaxValues"));
-}
+// var sensorMaxValues = [5, 8, 12];
+// if (localStorage.getItem("sensorMaxValues") != null) {
+//   sensorMaxValues = JSON.parse(localStorage.getItem("sensorMaxValues"));
+// }
 
 var randomNumber;
 var randomNumbers = "";
 var sensor;
-window.onload = function () {
-  myFunction();
-};
+// window.onload = function () {
+//   myFunction();
+// };
 
-function myFunction() {
-  const sb = document.querySelector("#sensorsList");
-  for (var index = 0; index < sensorList.length; index++) {
-    // create a new option
-    const option = new Option(sensorList[index], sensorList[index]);
-    sb.add(option, undefined);
-  }
-}
+// function myFunction() {
+//   const sb = document.querySelector("#sensorsList");
+//   for (var index = 0; index < sensorList.length; index++) {
+//     // create a new option
+//     const option = new Option(sensorList[index], sensorList[index]);
+//     sb.add(option, undefined);
+//   }
+// }
 
 function redirectToCreateSensor() {
   clearInterval(timer);
   document.getElementById("output").innerHTML = "";
-  localStorage.setItem("sensorList", JSON.stringify(sensorList));
-  localStorage.setItem("sensorMinValues", JSON.stringify(sensorMinValues));
-  localStorage.setItem("sensorMaxValues", JSON.stringify(sensorMaxValues));
+  // localStorage.setItem("sensorList", JSON.stringify(sensorList));
+  // localStorage.setItem("sensorMinValues", JSON.stringify(sensorMinValues));
+  // localStorage.setItem("sensorMaxValues", JSON.stringify(sensorMaxValues));
   window.location.href = "create-sensor.html";
 }
 
@@ -93,14 +93,15 @@ function getSensorsList() {
  * When the stop button is clicked then stop generating random numbers
  * While the start event is occurring, the min and max value will be displayed
  */
-document
-  .getElementById("sensorsList")
-  .addEventListener("click", getSensorsList);
-document.getElementById("start").addEventListener("click", startRandomNumbers);
-document.getElementById("stop").addEventListener("click", stopRandomNumbers);
-document.getElementById("stop").addEventListener("click", saveData);
-document.getElementById("msgRandomRange").innerHTML =
-  "Random numbers from " + min + " to " + max + ":";
+
+// document
+//   .getElementById("sensorsList")
+//   .addEventListener("click", getSensorsList);
+// document.getElementById("start").addEventListener("click", startRandomNumbers);
+// document.getElementById("stop").addEventListener("click", stopRandomNumbers);
+// document.getElementById("stop").addEventListener("click", saveData);
+// document.getElementById("msgRandomRange").innerHTML =
+//   "Random numbers from " + min + " to " + max + ":";
 
 // Creates random numbers
 function startRandomNumbers(e) {
