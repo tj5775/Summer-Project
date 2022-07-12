@@ -3,6 +3,9 @@ var timer;
 var min = 0;
 var max = 0;
 var sensorList = ["Ph", "Turbidity", "Cloralen"];
+// var topicList = ["Ph Topic", "Turbidity Topic", "Cloralen topic"];
+// var minList = [1, 2, 3];
+// var maxList = [5, 6, 7];
 
 if (localStorage.getItem("SavedToken") === null) {
   window.location.href = "login.html";
