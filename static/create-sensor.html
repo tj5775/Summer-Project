@@ -197,6 +197,50 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <div class="card-header py-3" id="createdSensorsMsg">          
+                                <h6 class="m-0 font-weight-bold text-primary">Created Sensors: </h6>                            
+                            </div>
+                            <div class="table-responsive">
+                                <div id="sensorsTable"></div>
+                                <!-- <table class="table table-bordered" id="createdSensorsTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sensor Name</th>
+                                            <th>Topic</th>
+                                            <th>Min</th>
+                                            <th>Max</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody> -->
+                                        
+                                        <!-- <script>
+                                            for(var index = 0; index < sensorList.length; index++){
+                                                document.write("<tr>Name<td></td>  <td>topic</td>  <td>Min</td> <td>Max</td> </tr>");
+                                            }
+                                        </script> -->
+                                        <!-- <tr>
+                                            <td>1</td>
+                                            <td>Ph</td>
+                                            <td>10</td>
+                                            <td>7/1/2022 08:30:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Ph</td>
+                                            <td>7</td>
+                                            <td>7/1/2022 08:30:05</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Ph</td>
+                                            <td>14</td>
+                                            <td>7/1/2022 08:30:10</td>
+                                        </tr> -->
+                                    <!-- </tbody>
+                                </table> -->
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
@@ -250,11 +294,48 @@
         var sensorCreatedMsg = document.getElementById('sensorCreatedMsg');
         sensorCreatedMsg.style.display = 'none';
         var addSensorForm = document.getElementById('addSensorForm')
+        var createdSensorsMsg = document.getElementById('createdSensorsMsg');
+        createdSensorsMsg.style.display = 'none';
         var errorMsg = [];
+        var sensorsList = [];
 
         document.getElementById('addBtn').addEventListener('click', addSensor);
         document.getElementById('minValue').addEventListener('change', displayMsgRange);
         document.getElementById('maxValue').addEventListener('change', displayMsgRange);
+
+        function createTable() {
+            var myTable = '<table class="table table-bordered"><tr> <thead><tr><th>Sensor Name</th> <th>Topic</th> <th>Min</th> <th>Max</th> </tr> </thead>';
+            
+            // LOOP THROUGH ARRAY & GENERATE ROWS-CELLS
+            var perrow = 1; // 1 CELLS PER ROW
+            sensorsList.forEach((value, i) => {
+            // "NORMAL" CELL
+            myTable += `<td>${value.name}</td>`;
+            myTable += `<td>${value.topic}</td>`;
+            myTable += `<td>${value.min}</td>`;
+            myTable += `<td>${value.max}</td>`;
+            
+            // BREAK INTO NEXT ROW
+            var next = i + 1;
+            if (next%perrow==0 && next!=data.length) { myTable += "</tr><tr>"; }
+            });
+
+            // CLOSE THE TABLE STRING
+            myTable += "</tr></table>";
+            
+            // ATTACH HTML TO SENSORSTABLE
+            document.getElementById("sensorsTable").innerHTML = myTable;
+        }
+
+        // It adds a new object to sensorsList list
+        function addToSensorsTable(name, topic, min, max){
+            var sensorObj = {};
+            sensorObj["name"] = name;
+            sensorObj["topic"] = topic;
+            sensorObj["min"] = min;
+            sensorObj["max"] = max;
+            sensorsList.push(sensorObj);
+        }
 
         // It creates a new record in the sensors_meta_data table using a fetch post request
         function saveSensor() {
@@ -269,6 +350,9 @@
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data),
             }).then((rest) => {
+                addToSensorsTable(sensor, topicValue, minValue, maxValue);
+                createdSensorsMsg.style.display = 'block';
+                createTable();
                 console.log("New Sensor saved successfully");
             }).catch(e => console.log(e));
         }
@@ -330,12 +414,12 @@
             else if (topicValue === "") {
                 errorMsg.push(`Please enter a topic`);
             }
-            else {
+            /*else {
                 var recordsNumb = await sensorTopicExists(sensorName, topicValue);
                 if (recordsNumb > 0) {
                     errorMsg.push(`Sensor ${sensorName} with topic ${topicValue} already exist`);
                 }
-            }
+            }*/
 
             document.getElementById("errorMsg").innerHTML = errorMsg;
 
@@ -344,9 +428,6 @@
             }
             else {
                 saveSensor();
-                // var sensorNames = await getSensorNames();
-                // console.log('names: ');
-                // console.log(sensorNames);
                 document.getElementById("newSensor").value = '';
                 document.getElementById("topic").value = '';
                 document.getElementById("minValue").value = 0;
